@@ -1,7 +1,7 @@
 let replacements = {};
 let dumpedVarNames = {};
 const storeName = "a" + crypto.randomUUID().replaceAll("-", "").substring(16);
-const vapeName = crypto.randomUUID().replaceAll("-", "").substring(16);
+const impactName = crypto.randomUUID().replaceAll("-", "").substring(16);
 
 // ANTICHEAT HOOK
 function replaceAndCopyFunction(oldFunc, newFunc) {
@@ -118,19 +118,19 @@ function modifyCode(text) {
 		});
 	`);
 
-	addReplacement('VERSION$1," | ",', `"${vapeName} v1.0.5"," | ",`);
+	addReplacement('VERSION$1," | ",', `"${impactName} v1.0.5"," | ",`);
 	addReplacement('if(!nt.canConnect){', 'nt.errorMessage = nt.errorMessage == "Could not join server. You are connected to a VPN or proxy. Please disconnect from it and refresh the page." ? "You\'re either using a detected VPN server or IP banned for cheating." : nt.errorMessage;');
 
 	// DRAWING SETUP
 	addReplacement('ut(this,"glintTexture");', `
-		ut(this, "vapeTexture");
+		ut(this, "impactTexture");
 		ut(this, "v4Texture");
 	`);
-	addReplacement('skinManager.loadTextures(),', ',this.loadVape(),');
+	addReplacement('skinManager.loadTextures(),', ',this.loadimpact(),');
 	addReplacement('async loadSpritesheet(){', `
-		async loadVape() {
-			this.vapeTexture = await this.loader.loadAsync("https://raw.githubusercontent.com/7GrandDadPGN/VapeForMiniblox/main/assets/logo.png");
-			this.v4Texture = await this.loader.loadAsync("https://raw.githubusercontent.com/7GrandDadPGN/VapeForMiniblox/main/assets/logov4.png");
+		async loadimpact() {
+			this.impactTexture = await this.loader.loadAsync("https://raw.githubusercontent.com/ProgMEM-CC/ImpactClient-For-miniblox/main/assets/logo.png");
+			this.v4Texture = await this.loader.loadAsync("https://raw.githubusercontent.com/ProgMEM-CC/ImpactClient-For-miniblox/main/assets/logov4.png");
 		}
 		async loadSpritesheet(){
 	`, true);
@@ -161,7 +161,7 @@ function modifyCode(text) {
 			const posY = 17;
 			ctx$3.imageSmoothingEnabled = true;
 			ctx$3.imageSmoothingQuality = "high";
-			drawImage(ctx$3, textureManager.vapeTexture.image, posX, posY, 80, 21, \`HSL(\${(colorOffset % 1) * 360}, 100%, 50%)\`);
+			drawImage(ctx$3, textureManager.impactTexture.image, posX, posY, 80, 21, \`HSL(\${(colorOffset % 1) * 360}, 100%, 50%)\`);
 			drawImage(ctx$3, textureManager.v4Texture.image, posX + 81, posY + 1, 33, 18);
 
 			let offset = 0;
@@ -355,7 +355,7 @@ function modifyCode(text) {
 		if (_ == "GrandDad") {
 			const $ = skins[_];
 			return new Promise((et, tt) => {
-				textureManager.loader.load("https://raw.githubusercontent.com/7GrandDadPGN/VapeForMiniblox/main/assets/skin.png", rt => {
+				textureManager.loader.load("https://raw.githubusercontent.com/7GrandDadPGN/impactForMiniblox/main/assets/skin.png", rt => {
 					const nt = {
 						atlas: rt,
 						id: _,
@@ -373,7 +373,7 @@ function modifyCode(text) {
 		if (_ == "GrandDad") {
 			const $ = capes[_];
 			return new Promise((et, tt) => {
-				textureManager.loader.load("https://raw.githubusercontent.com/7GrandDadPGN/VapeForMiniblox/main/assets/cape.png", rt => {
+				textureManager.loader.load("https://raw.githubusercontent.com/7GrandDadPGN/impactForMiniblox/main/assets/cape.png", rt => {
 					const nt = {
 						atlas: rt,
 						id: _,
@@ -463,20 +463,20 @@ function modifyCode(text) {
 				if (args.length > 1) {
 					switch (args[1]) {
 						case "save":
-							globalThis.${storeName}.saveVapeConfig(args[2]);
+							globalThis.${storeName}.saveimpactConfig(args[2]);
 							game$1.chat.addChat({text: "Saved config " + args[2]});
 							break;
 						case "load":
-							globalThis.${storeName}.saveVapeConfig();
-							globalThis.${storeName}.loadVapeConfig(args[2]);
+							globalThis.${storeName}.saveimpactConfig();
+							globalThis.${storeName}.loadimpactConfig(args[2]);
 							game$1.chat.addChat({text: "Loaded config " + args[2]});
 							break;
 						case "import":
-							globalThis.${storeName}.importVapeConfig(args[2]);
+							globalThis.${storeName}.importimpactConfig(args[2]);
 							game$1.chat.addChat({text: "Imported config"});
 							break;
 						case "export":
-							globalThis.${storeName}.exportVapeConfig();
+							globalThis.${storeName}.exportimpactConfig();
 							game$1.chat.addChat({text: "Config set to clipboard!"});
 							break;
 					}
@@ -1041,7 +1041,7 @@ function modifyCode(text) {
 			new Module("AutoQueue", function() {});
 			new Module("AutoVote", function() {});
 			const chatdisabler = new Module("ChatDisabler", function() {});
-			chatdisablermsg = chatdisabler.addoption("Message", String, "youtube.com/c/7GrandDadVape");
+			chatdisablermsg = chatdisabler.addoption("Message", String, "youtube.com/c/7GrandDadimpact");
 			new Module("FilterBypass", function() {});
 
 			const survival = new Module("SurvivalMode", function(callback) {
@@ -1056,7 +1056,7 @@ function modifyCode(text) {
 		})();
 	`);
 
-	async function saveVapeConfig(profile) {
+	async function saveimpactConfig(profile) {
 		if (!loadedConfig) return;
 		let saveList = {};
 		for(const [name, module] of Object.entries(unsafeWindow.globalThis[storeName].modules)) {
@@ -1065,15 +1065,15 @@ function modifyCode(text) {
 				saveList[name].options[option] = setting[1];
 			}
 		}
-		GM_setValue("vapeConfig" + (profile ?? unsafeWindow.globalThis[storeName].profile), JSON.stringify(saveList));
-		GM_setValue("mainVapeConfig", JSON.stringify({profile: unsafeWindow.globalThis[storeName].profile}));
+		GM_setValue("impactConfig" + (profile ?? unsafeWindow.globalThis[storeName].profile), JSON.stringify(saveList));
+		GM_setValue("mainimpactConfig", JSON.stringify({profile: unsafeWindow.globalThis[storeName].profile}));
 	};
 
-	async function loadVapeConfig(switched) {
+	async function loadimpactConfig(switched) {
 		loadedConfig = false;
-		const loadedMain = JSON.parse(await GM_getValue("mainVapeConfig", "{}")) ?? {profile: "default"};
+		const loadedMain = JSON.parse(await GM_getValue("mainimpactConfig", "{}")) ?? {profile: "default"};
 		unsafeWindow.globalThis[storeName].profile = switched ?? loadedMain.profile;
-		const loaded = JSON.parse(await GM_getValue("vapeConfig" + unsafeWindow.globalThis[storeName].profile, "{}"));
+		const loaded = JSON.parse(await GM_getValue("impactConfig" + unsafeWindow.globalThis[storeName].profile, "{}"));
 		if (!loaded) {
 			loadedConfig = true;
 			return;
@@ -1095,15 +1095,15 @@ function modifyCode(text) {
 		loadedConfig = true;
 	};
 
-	async function exportVapeConfig() {
-		navigator.clipboard.writeText(await GM_getValue("vapeConfig" + unsafeWindow.globalThis[storeName].profile, "{}"));
+	async function exportimpactConfig() {
+		navigator.clipboard.writeText(await GM_getValue("impactConfig" + unsafeWindow.globalThis[storeName].profile, "{}"));
 	};
 
-	async function importVapeConfig() {
+	async function importimpactConfig() {
 		const arg = await navigator.clipboard.readText();
 		if (!arg) return;
-		GM_setValue("vapeConfig" + unsafeWindow.globalThis[storeName].profile, arg);
-		loadVapeConfig();
+		GM_setValue("impactConfig" + unsafeWindow.globalThis[storeName].profile, arg);
+		loadimpactConfig();
 	};
 
 	let loadedConfig = false;
@@ -1120,13 +1120,13 @@ function modifyCode(text) {
 				}
 			}, 10);
 		});
-		unsafeWindow.globalThis[storeName].saveVapeConfig = saveVapeConfig;
-		unsafeWindow.globalThis[storeName].loadVapeConfig = loadVapeConfig;
-		unsafeWindow.globalThis[storeName].exportVapeConfig = exportVapeConfig;
-		unsafeWindow.globalThis[storeName].importVapeConfig = importVapeConfig;
-		loadVapeConfig();
+		unsafeWindow.globalThis[storeName].saveimpactConfig = saveimpactConfig;
+		unsafeWindow.globalThis[storeName].loadimpactConfig = loadimpactConfig;
+		unsafeWindow.globalThis[storeName].exportimpactConfig = exportimpactConfig;
+		unsafeWindow.globalThis[storeName].importimpactConfig = importimpactConfig;
+		loadimpactConfig();
 		setInterval(async function() {
-			saveVapeConfig();
+			saveimpactConfig();
 		}, 10000);
 	}
 
